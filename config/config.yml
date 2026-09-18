@@ -6,7 +6,7 @@ samplesheet: "config/samples.tsv"
 
 get_fastq:
   PE: true
-  tool: "fasterq_dump"
+  tool: "fastq_dump"
   fastq_dump:
     extra: "-X 10000"
   fasterq_dump:
@@ -37,16 +37,6 @@ genome:
     datasets:
       genbank: "KF297339.1"
       assembly: ""
-      extra: ""
-  human:
-    source: "ncbi" # local vs ncbi database
-    prefix:
-    local:
-      fasta:
-      gff:
-    datasets:
-      genbank:
-      assembly: "GCF_000001405.40"
       extra: ""
 
 # Configs for alignment tools
@@ -106,3 +96,23 @@ qc:
     extra: "--verbose --dirs"
   fastqc:
     extra: "--quiet"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. JBrowse Configs
+# ─────────────────────────────────────────────────────────────────────────────
+
+jbrowse:
+  dir: "jbrowse"
+  s3_url: "https://js2.jetstream-cloud.org:8001/swift/v1/fastq-prep-and-align" #No trailing slash
+  add_assembly:
+    name: 
+    extra: "--alias 'tb40' --displayName 'CMV TB40'"
+  add_anno:
+    name: 
+    extra: "--name 'annotation'"
+  add_bw:
+    name: 
+    extra: ""
+  add_cram:
+    name: 
+    extra: ""

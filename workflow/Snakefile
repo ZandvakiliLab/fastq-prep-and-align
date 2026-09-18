@@ -68,6 +68,7 @@ use rule multiqc from snakemake_prep_reads as snakemake_prep_reads_multiqc with:
 # 4. Default Target
 # ─────────────────────────────────────────────────────────────────────────────
 
+include: "rules/jbrowse.smk"
 
 rule all:
     default_target: True
@@ -76,3 +77,17 @@ rule all:
         expand(
             "results/processed_alignment/cram/{sample}.cram.crai", sample=samples.index
         ),
+
+rule build_jbrowse:
+    input:
+        expand(
+            "results/jbrowse/{sample}_{strand}_bw",
+            sample=samples.index,
+            strand=["plus", "minus"],
+        ),
+        expand(
+            "results/jbrowse/{sample}_cram",
+            sample=samples.index
+        ),
+        "results/jbrowse/add_anno",
+        "results/jbrowse/add_assembly",
