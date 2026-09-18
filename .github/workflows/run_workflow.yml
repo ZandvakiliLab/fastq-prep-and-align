@@ -1,0 +1,64 @@
+# .github/workflows/run_workflow.yml
+name: RNA-seq Pipeline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'workflow/**'
+      - 'config/**'
+      - 'profiles/**'
+      - '.github/workflows/run_workflow.yml'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Linting
+        uses: snakemake/snakemake-github-action@v2
+        with:
+          directory: "."
+          snakefile: "workflow/Snakefile"
+          args: "--lint"
+
+  snakemake:
+    # Must match the labels you set in the GARM pool
+    runs-on: [self-hosted, linux, jetstream2, snakemake]
+
+    # Optional: cancel in-progress runs on new push to same branch
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    
+    needs: lint
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Snakemake
+        uses: snakemake/snakemake-github-action@v2
+        with:
+          directory: "."
+          snakefile: "workflow/Snakefile"
+          install-apptainer: "true"
+          args: >-
+            --cores all
+            --printshellcmds
+            --software-deployment-method apptainer conda
+            --resources disk_mb=270000 mem_mb=55000
+            --default-resources disk_mb=75000 mem_mb=38000
+            --set-resources star_align:mem_mb=38000
+            --set-resources star_align:threads=4 
+            --default-storage-provider fs
+            --default-storage-prefix /mnt/snakemake
+            --shared-fs-usage software-deployment persistence sources source-cache
+            --local-storage-prefix /home/runner/snakemake-scratch
+            --rerun-incomplete
+            --show-failed-logs
+            --conda-prefix "/mnt/snakemake/conda"
+          stagein: "mamba install -n snakemake bioconda::snakemake-storage-plugin-fs"
+          show-disk-usage-on-error: true

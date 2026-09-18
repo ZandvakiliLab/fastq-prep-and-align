@@ -1,0 +1,11 @@
+results/**
+resources/**
+logs/**
+.snakemake
+.snakemake/**
+.vscode/*
+*.Rdata
+*.RData
+.test/.cache/
+jbrowse/**
+!jbrowse/config.json
