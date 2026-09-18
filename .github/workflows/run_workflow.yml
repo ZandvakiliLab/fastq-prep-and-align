@@ -67,11 +67,10 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y gh
-          
+
       - name: Setup Rclone
         uses: AnimMouse/setup-rclone@v1
         with:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
           
-      - run: rclone copy /mnt/snakemake/results/ s3:your-s3-bucket-name/ --update 
-
+      - run: rclone copy /mnt/snakemake/results/ jetstream2://zandvakili-cmv-rna-seq/ --update
