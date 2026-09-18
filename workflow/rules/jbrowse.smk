@@ -1,11 +1,13 @@
 rule jbrowse_create:
     output:
         touch("results/jbrowse/create"),
-        config["jbrowse"]["dir"] + "/index.html",
+        html=os.path.join(config["jbrowse"]["dir"], "index.html"),
     conda:
         "../envs/jbrowse.yml"
+    log: 
+        "results/jbrowse/create.log",
     params:
-        jbrowse_dir=config["jbrowse"]["dir"],
+        jbrowse_dir=lambda w, input: os.path.dirname("{input.html}")
     message:
         "create jbrowse folder"
     shell:
@@ -32,25 +34,26 @@ rule faToTwoBit_fa:
 
 rule jbrowse_add_assembly:
     input:
-        config["jbrowse"]["dir"] + "/index.html",
+        os.path.join(config["jbrowse"]["dir"], "index.html"),
     output:
         touch("results/jbrowse/add_assembly"),
-        config["jbrowse"]["dir"] + "/config.json",
+        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
     conda:
         "../envs/jbrowse.yml"
+    log:
+        "results/jbrowse/add_assembly.log",
     resources:
         file_lock=1,
     params:
         s3_url=lambda wc: "{url}/results/genome/genome.2bit".format(
             url=config["jbrowse"]["s3_url"]
         ),
-        jbrowse_config=config["jbrowse"]["dir"] + "/config.json",
         extra=config["jbrowse"]["add_assembly"]["extra"],
     message:
         "add genome assembly to jbrowse"
     shell:
         """
-        jbrowse add-assembly {params.s3_url} --type twoBit --target {params.jbrowse_config} {params.extra} --force
+        jbrowse add-assembly {params.s3_url} --type twoBit --target {output.config} {params.extra} --force
         """
 
 
@@ -66,6 +69,8 @@ rule sort_gff:
         gff="results/genome/genome.sorted.gff.gz",
     conda:
         "../envs/jbrowse.yml"
+    log:
+        "results/genome/genome_sort_gff.log",
     message:
         "sort gff3"
     shell:
@@ -81,6 +86,8 @@ rule index_gff:
         "results/genome/genome.sorted.gff.gz.tbi",
     conda:
         "../envs/jbrowse.yml"
+    log:
+        "results/genome/genome_index_gff.log",
     message:
         "index gff3"
     shell:
@@ -91,24 +98,25 @@ rule index_gff:
 
 rule jbrowse_add_anno:
     input:
-        config["jbrowse"]["dir"] + "/config.json",
+        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
     output:
         touch("results/jbrowse/add_anno"),
     conda:
         "../envs/jbrowse.yml"
+    log:
+        "results/jbrowse/add_anno.log",
     resources:
         file_lock=1,
     params:
         s3_url=lambda wc: "{url}/results/genome/genome.sorted.gff.gz".format(
             url=config["jbrowse"]["s3_url"]
         ),
-        jbrowse_config=config["jbrowse"]["dir"] + "/config.json",
         extra=config["jbrowse"]["add_anno"]["extra"],
     message:
         "add genome annotation to jbrowse"
     shell:
         """
-        jbrowse add-track {params.s3_url} --target {params.jbrowse_config} {params.extra}
+        jbrowse add-track {params.s3_url} --target {input.config} {params.extra}
         """
 
 
@@ -119,7 +127,7 @@ rule jbrowse_add_anno:
 
 rule jbrowse_add_bw:
     input:
-        config["jbrowse"]["dir"] + "/config.json",
+        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
     output:
         touch(
             expand(
@@ -130,18 +138,19 @@ rule jbrowse_add_bw:
         ),
     conda:
         "../envs/jbrowse.yml"
+    log:
+        "results/jbrowse/add_bw.log",
     resources:
         file_lock=1,
     params:
         s3_url_plus=expand(
-            config["jbrowse"]["s3_url"] + "/results/deeptools/coverage/{sample}.plus.bw",
+            os.path.join(config["jbrowse"]["s3_url"], "results/deeptools/coverage/{sample}.plus.bw"),
             sample=samples.index,
         ),
         s3_url_minus=expand(
-            config["jbrowse"]["s3_url"] + "/results/deeptools/coverage/{sample}.minus.bw",
+            os.path.join(config["jbrowse"]["s3_url"], "results/deeptools/coverage/{sample}.minus.bw"),
             sample=samples.index,
         ),
-        jbrowse_config=config["jbrowse"]["dir"] + "/config.json",
         extra=config["jbrowse"]["add_bw"]["extra"],
     message:
         "add plus bw tracks to jbrowse"
@@ -149,14 +158,14 @@ rule jbrowse_add_bw:
         """
         for i in {params.s3_url_plus}; do
             jbrowse add-track $i \
-                --target {params.jbrowse_config} \
+                --target {input.config} \
                 --name "${{i##*/}}" \
                 {params.extra}
         done
 
         for i in {params.s3_url_minus}; do
             jbrowse add-track $i \
-                --target {params.jbrowse_config} \
+                --target {input.config} \
                 --name "${{i##*/}}" \
                 --config '{{"displays":[{{"type":"LinearWiggleDisplay","displayId":"my_bw-LinearWiggleDisplay","inverted":true}}]}}' \
                 {params.extra}
@@ -170,7 +179,7 @@ rule jbrowse_add_bw:
 
 rule jbrowse_add_cram:
     input:
-        config["jbrowse"]["dir"] + "/config.json",
+        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
     output:
         touch(
             expand(
@@ -180,14 +189,15 @@ rule jbrowse_add_cram:
         ),
     conda:
         "../envs/jbrowse.yml"
+    log:
+        "results/jbrowse/add_cram.log"
     resources:
         file_lock=1,
     params:
         s3_url=expand(
-            config["jbrowse"]["s3_url"] + "/results/processed_alignment/cram/{sample}.cram",
+            os.path.join(config["jbrowse"]["s3_url"], "results/processed_alignment/cram/{sample}.cram"),
             sample=samples.index
         ),
-        jbrowse_config=config["jbrowse"]["dir"] + "/config.json",
         extra=config["jbrowse"]["add_cram"]["extra"],
     message:
         "add plus cram tracks to jbrowse"
@@ -196,7 +206,7 @@ rule jbrowse_add_cram:
         for i in {params.s3_url}; do
             jbrowse add-track $i \
                 --indexFile $i.crai \
-                --target {params.jbrowse_config} \
+                --target {input.config} \
                 --name "${{i##*/}}" \
                 --config '{{"displays":[{{"type":"LinearPileupDisplay", "colorBySetting": {{"type": "strand"}}}}]}}' \
                 {params.extra}

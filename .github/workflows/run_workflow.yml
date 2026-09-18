@@ -42,38 +42,17 @@ jobs:
       - name: Run Snakemake
         uses: snakemake/snakemake-github-action@v2
         with:
-          directory: ".test"
+          directory: "."
           snakefile: "workflow/Snakefile"
           install-apptainer: "true"
           args: >-
             --cores all
             --printshellcmds
             --software-deployment-method apptainer conda
-            --resources disk_mb=270000 mem_mb=55000
+            --resources disk_mb=270000 mem_mb=55000 file_lock=1
             --default-resources disk_mb=75000 mem_mb=38000
             --set-resources star_align:mem_mb=38000
             --set-resources star_align:threads=4 
-            --default-storage-provider fs
-            --default-storage-prefix /mnt/snakemake
-            --shared-fs-usage software-deployment persistence sources source-cache
-            --local-storage-prefix /home/runner/snakemake-scratch
-            --rerun-incomplete
-            --show-failed-logs
-            --conda-prefix "/mnt/snakemake/conda"
-          stagein: "mamba install -n snakemake bioconda::snakemake-storage-plugin-fs"
-          show-disk-usage-on-error: true
-
-      - name: Run Snakemake
-        uses: snakemake/snakemake-github-action@v2
-        with:
-          directory: ".test"
-          snakefile: "workflow/Snakefile"
-          install-apptainer: "true"
-          args: >-
-            build_jbrowse
-            --cores all
-            --printshellcmds
-            --software-deployment-method apptainer conda
             --default-storage-provider fs
             --default-storage-prefix /mnt/snakemake
             --shared-fs-usage software-deployment persistence sources source-cache
