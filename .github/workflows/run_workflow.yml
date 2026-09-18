@@ -63,6 +63,11 @@ jobs:
           stagein: "mamba install -n snakemake bioconda::snakemake-storage-plugin-fs"
           show-disk-usage-on-error: true
 
+      - name: Install GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install -y gh
+          
       - name: Setup Rclone
         uses: AnimMouse/setup-rclone@v1
         with:
