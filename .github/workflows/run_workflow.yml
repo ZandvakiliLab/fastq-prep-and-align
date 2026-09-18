@@ -42,7 +42,7 @@ jobs:
       - name: Run Snakemake
         uses: snakemake/snakemake-github-action@v2
         with:
-          directory: "."
+          directory: ".test"
           snakefile: "workflow/Snakefile"
           install-apptainer: "true"
           args: >-
@@ -62,3 +62,11 @@ jobs:
             --conda-prefix "/mnt/snakemake/conda"
           stagein: "mamba install -n snakemake bioconda::snakemake-storage-plugin-fs"
           show-disk-usage-on-error: true
+
+      - name: Setup Rclone
+        uses: AnimMouse/setup-rclone@v1
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG }}
+          
+      - run: rclone copy /mnt/snakemake/results/ s3:your-s3-bucket-name/ --update 
+
