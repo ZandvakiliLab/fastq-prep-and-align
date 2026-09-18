@@ -6,7 +6,7 @@ samplesheet: "config/samples.tsv"
 
 get_fastq:
   PE: true
-  tool: "fasterq_dump"
+  tool: "fastq_dump"
   fastq_dump:
     extra: "-X 10000"
   fasterq_dump:
