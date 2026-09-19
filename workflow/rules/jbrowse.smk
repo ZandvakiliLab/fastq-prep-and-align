@@ -1,18 +1,16 @@
 rule jbrowse_create:
     output:
         touch("results/jbrowse/create"),
-        html=os.path.join(config["jbrowse"]["dir"], "index.html"),
+        output_dir=directory(config["jbrowse"]["dir"]),
     conda:
         "../envs/jbrowse.yml"
     log: 
         "results/jbrowse/create.log",
-    params:
-        jbrowse_dir=lambda w, input: os.path.dirname("{output.html}")
     message:
         "create jbrowse folder"
     shell:
         """
-        jbrowse create {params.jbrowse_dir} --force
+        jbrowse create {output.output_dir} --force
         """
 
 
@@ -34,10 +32,10 @@ rule faToTwoBit_fa:
 
 rule jbrowse_add_assembly:
     input:
-        os.path.join(config["jbrowse"]["dir"], "index.html"),
+        jbrowse_created="results/jbrowse/create",
+        jbrowse_dir=config["jbrowse"]["dir"],
     output:
         touch("results/jbrowse/add_assembly"),
-        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
     conda:
         "../envs/jbrowse.yml"
     log:
@@ -45,6 +43,7 @@ rule jbrowse_add_assembly:
     resources:
         file_lock=1,
     params:
+        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
         s3_url=lambda wc: "{url}/results/genome/genome.2bit".format(
             url=config["jbrowse"]["s3_url"]
         ),
@@ -53,9 +52,8 @@ rule jbrowse_add_assembly:
         "add genome assembly to jbrowse"
     shell:
         """
-        jbrowse add-assembly {params.s3_url} --type twoBit --target {output.config} {params.extra} --force
+        jbrowse add-assembly {params.s3_url} --type twoBit --target {params.config} {params.extra} --force
         """
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. Add Annotation
@@ -98,7 +96,7 @@ rule index_gff:
 
 rule jbrowse_add_anno:
     input:
-        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
+        assembly_added="results/jbrowse/add_assembly",
     output:
         touch("results/jbrowse/add_anno"),
     conda:
@@ -108,6 +106,7 @@ rule jbrowse_add_anno:
     resources:
         file_lock=1,
     params:
+        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
         s3_url=lambda wc: "{url}/results/genome/genome.sorted.gff.gz".format(
             url=config["jbrowse"]["s3_url"]
         ),
@@ -116,7 +115,7 @@ rule jbrowse_add_anno:
         "add genome annotation to jbrowse"
     shell:
         """
-        jbrowse add-track {params.s3_url} --target {input.config} {params.extra}
+        jbrowse add-track {params.s3_url} --target {params.config} {params.extra}
         """
 
 
@@ -127,7 +126,7 @@ rule jbrowse_add_anno:
 
 rule jbrowse_add_bw:
     input:
-        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
+        assembly_added="results/jbrowse/add_assembly",
     output:
         touch(
             expand(
@@ -143,6 +142,7 @@ rule jbrowse_add_bw:
     resources:
         file_lock=1,
     params:
+        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
         s3_url_plus=expand(
             os.path.join(config["jbrowse"]["s3_url"], "results/deeptools/coverage/{sample}.plus.bw"),
             sample=samples.index,
@@ -158,14 +158,14 @@ rule jbrowse_add_bw:
         """
         for i in {params.s3_url_plus}; do
             jbrowse add-track $i \
-                --target {input.config} \
+                --target {params.config} \
                 --name "${{i##*/}}" \
                 {params.extra}
         done
 
         for i in {params.s3_url_minus}; do
             jbrowse add-track $i \
-                --target {input.config} \
+                --target {params.config} \
                 --name "${{i##*/}}" \
                 --config '{{"displays":[{{"type":"LinearWiggleDisplay","displayId":"my_bw-LinearWiggleDisplay","inverted":true}}]}}' \
                 {params.extra}
@@ -179,7 +179,7 @@ rule jbrowse_add_bw:
 
 rule jbrowse_add_cram:
     input:
-        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
+        assembly_added="results/jbrowse/add_assembly",
     output:
         touch(
             expand(
@@ -194,6 +194,7 @@ rule jbrowse_add_cram:
     resources:
         file_lock=1,
     params:
+        config=os.path.join(config["jbrowse"]["dir"], "config.json"),
         s3_url=expand(
             os.path.join(config["jbrowse"]["s3_url"], "results/processed_alignment/cram/{sample}.cram"),
             sample=samples.index
@@ -206,7 +207,7 @@ rule jbrowse_add_cram:
         for i in {params.s3_url}; do
             jbrowse add-track $i \
                 --indexFile $i.crai \
-                --target {input.config} \
+                --target {params.config} \
                 --name "${{i##*/}}" \
                 --config '{{"displays":[{{"type":"LinearPileupDisplay", "colorBySetting": {{"type": "strand"}}}}]}}' \
                 {params.extra}
