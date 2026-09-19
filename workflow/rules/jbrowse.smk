@@ -7,7 +7,7 @@ rule jbrowse_create:
     log: 
         "results/jbrowse/create.log",
     params:
-        jbrowse_dir=lambda w, input: os.path.dirname("{input.html}")
+        jbrowse_dir=lambda w, input: os.path.dirname("{output.html}")
     message:
         "create jbrowse folder"
     shell:
