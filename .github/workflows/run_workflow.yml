@@ -73,10 +73,12 @@ jobs:
         with:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
           
-      - run: rclone copy /mnt/snakemake/fastq-prep-and-align/ jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align --update
+      - run: | 
+          rclone copy /mnt/snakemake/fastq-prep-and-align/results/ jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/results --update
+          rclone copy /mnt/snakemake/fastq-prep-and-align/jbrowse/config.json jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/config.json --update
 
-  quarto:
-    name: Quarto
+  website:
+    name: Create and Publish Website
     runs-on: ubuntu-latest
     needs: snakemake
     permissions:
@@ -84,16 +86,27 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Rclone
-        uses: AnimMouse/setup-rclone@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          rclone_config: ${{ secrets.RCLONE_CONFIG }}
+          node-version: "20"
 
-      - run: | 
-          sudo apt-get install -y tree
-          rclone copy jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/results/multiqc/multiqc_report.html webpage/multiqc_report.html -v
-          rclone copy jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/ webpage/jbrowse/ -v
-          tree webpage
+      - name: Install JBrowse CLI
+        run: npm install -g @jbrowse/cli
+
+      - name: Download latest JBrowse2 web app
+        run: |
+          jbrowse create webpage/jbrowse
+          echo "JBrowse2 version: $(cat webpage/jbrowse/version.txt)"
+
+      - name: Download JBrowse2 config
+        run: | 
+          mkdir webpage/jbrowse webpage/multiqc
+          wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/multiqc/multiqc_report.html -O webpage/multiqc/multiqc_report.html
+          wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/config.json -O webpage/jbrowse/config.json
+
+      - name: Add .nojekyll to prevent Jekyll processing
+        run: touch webpage/jbrowse/.nojekyll
 
       - name: Install Quarto
         uses: quarto-dev/quarto-actions/setup@v2
