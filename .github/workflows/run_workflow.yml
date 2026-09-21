@@ -101,7 +101,7 @@ jobs:
 
       - name: Download JBrowse2 config
         run: | 
-          mkdir webpage/jbrowse webpage/multiqc
+          mkdir webpage/multiqc
           wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/multiqc/multiqc_report.html -O webpage/multiqc/multiqc_report.html
           wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/config.json -O webpage/jbrowse/config.json
 
