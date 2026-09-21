@@ -54,7 +54,7 @@ jobs:
             --set-resources star_align:mem_mb=38000
             --set-resources star_align:threads=4 
             --default-storage-provider fs
-            --default-storage-prefix /mnt/snakemake
+            --default-storage-prefix /mnt/snakemake/fastq-prep-and-align
             --shared-fs-usage software-deployment persistence sources source-cache
             --local-storage-prefix /home/runner/snakemake-scratch
             --rerun-incomplete

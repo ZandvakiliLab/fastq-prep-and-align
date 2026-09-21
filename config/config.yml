@@ -103,7 +103,7 @@ qc:
 
 jbrowse:
   dir: "jbrowse"
-  s3_url: "https://js2.jetstream-cloud.org:8001/swift/v1/fastq-prep-and-align" #No trailing slash
+  s3_url: "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align" #No trailing slash
   add_assembly:
     name: 
     extra: "--alias 'tb40' --displayName 'CMV TB40'"
