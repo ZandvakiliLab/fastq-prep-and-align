@@ -1,0 +1,91 @@
+from snakemake.utils import min_version
+import pandas as pd
+import os 
+
+min_version("6.10.0")
+
+
+configfile: "config/config.yml"
+
+
+# read sample sheet
+samples = (
+    pd.read_csv(config["samplesheet"], sep="\t", dtype={"sample": str})
+    .set_index("sample", drop=False)
+    .sort_index()
+)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 1. Prep FASTQ file module
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+# declare https://github.com/ZandvakiliLab/snakemake-prep-reads as a module
+module snakemake_prep_reads:
+    snakefile:
+        github(
+            "ZandvakiliLab/snakemake-prep-reads",
+            path="workflow/Snakefile",
+            branch="main",
+        )
+    config:
+        config
+
+
+# use all rules from https://github.com/ZandvakiliLab/snakemake-prep-reads
+use rule * from snakemake_prep_reads as snakemake_prep_reads_*
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. Alignment module
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+# declare https://github.com/ZandvakiliLab/snakemake-align as a module
+module snakemake_align:
+    snakefile:
+        github(
+            "ZandvakiliLab/snakemake-align", path="workflow/Snakefile", branch="main"
+        )
+    config:
+        config
+
+
+# use all rules from https://github.com/ZandvakiliLab/snakemake-align
+use rule * from snakemake_align exclude multiqc as snakemake_align_*
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 3. Module rule Modification
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+use rule multiqc from snakemake_prep_reads as snakemake_prep_reads_multiqc with:
+    input:
+        lambda wc: snakemake_prep_reads.get_multiqc_input(wc)
+        + snakemake_align.get_multiqc_input(wc),
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. Default Target
+# ─────────────────────────────────────────────────────────────────────────────
+
+include: "rules/jbrowse.smk"
+
+rule all:
+    default_target: True
+    input:
+        "results/multiqc/multiqc_report.html",
+        expand(
+            "results/processed_alignment/cram/{sample}.cram.crai", sample=samples.index
+        ),
+        expand(
+            "results/jbrowse/{sample}_{strand}_bw",
+            sample=samples.index,
+            strand=["plus", "minus"],
+        ),
+        expand(
+            "results/jbrowse/{sample}_cram",
+            sample=samples.index
+        ),
+        "results/jbrowse/add_anno",
+        "results/jbrowse/add_assembly",

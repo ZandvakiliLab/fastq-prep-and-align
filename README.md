@@ -1,0 +1,1 @@
+# Template for cloud Based FASTQ processing and alignment

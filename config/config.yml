@@ -1,0 +1,118 @@
+samplesheet: "config/samples.tsv"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 1. Prep FASTQ Module Configs
+# ─────────────────────────────────────────────────────────────────────────────
+
+get_fastq:
+  PE: true
+  tool: "fastq_dump"
+  fastq_dump:
+    extra: "-X 10000"
+  fasterq_dump:
+    extra: ""
+trimming:
+  tool: "fastp"
+  fastp:
+    extra: ""
+  fastplong:
+    extra: ""
+umi_extraction:
+  enabled: false  # Set to true to enable UMI extraction
+  tool: "umi_tools"
+  umi_tools:
+    extra: ""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. Alignment Module Configs
+# ─────────────────────────────────────────────────────────────────────────────
+# Configs for obtaining genome sequence and annotation
+genome:
+  cmv:
+    source: "ncbi" # local vs ncbi database
+    prefix:
+    local:
+      fasta: 
+      gff:
+    datasets:
+      genbank: "KF297339.1"
+      assembly: ""
+      extra: ""
+
+# Configs for alignment tools
+mapping:
+  tool: "star"
+  bowtie2:
+    index: ""
+    extra: ""
+  bwa_mem2:
+    extra: ""
+    sort: "samtools"
+    sort_order: "coordinate"
+    sort_extra: ""
+  star:
+    index: ""
+    extra: ["--outFilterMultimapNmax 10", "--outSAMmultNmax 1", "--outMultimapperOrder Random", "--alignIntronMax 1"]
+  minimap2:
+    index: ""
+    extra: "-ax map-ont"
+    sorting: "coordinate"
+    sort_extra: ""
+
+# Configs for processing post-alignment
+mapping_postprocessing:
+  samtools_sort:
+    extra: "-m 4G"
+  samtools_index:
+    extra: ""
+  deduplication:
+    enabled: false
+    tool: "picard"
+    umi_tools:
+      extra: "" # or directional, cluster, adjacency, etc.
+    samtools:
+      extra: "-c -r --no-PG"
+    picard:
+      extra: ""
+
+# Configs for mapping statistics
+mapping_stats:
+  gffread:
+    extra: ""
+  rseqc_infer_experiment:
+    extra: ""
+  rseqc_bam_stat:
+    extra: ""
+  deeptools_coverage:
+    genome_size: 2913260081
+    extra: "--binSize 1 --normalizeUsing BPM"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 3. Common Configs
+# ─────────────────────────────────────────────────────────────────────────────
+
+qc:
+  multiqc:
+    extra: "--verbose --dirs"
+  fastqc:
+    extra: "--quiet"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. JBrowse Configs
+# ─────────────────────────────────────────────────────────────────────────────
+
+jbrowse:
+  dir: "jbrowse"
+  s3_url: "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align" #No trailing slash
+  add_assembly:
+    name: 
+    extra: "--alias 'tb40' --displayName 'CMV TB40'"
+  add_anno:
+    name: 
+    extra: "--name 'annotation'"
+  add_bw:
+    name: 
+    extra: ""
+  add_cram:
+    name: 
+    extra: ""
