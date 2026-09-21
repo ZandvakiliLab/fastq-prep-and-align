@@ -1,6 +1,9 @@
 project:
   type: website
-
+  resources:
+    - jbrowse/
+    - multiqc/
+    
 website:
   title: "Test RNA-Seq Website"
   navbar:

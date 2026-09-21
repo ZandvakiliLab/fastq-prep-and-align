@@ -75,7 +75,7 @@ jobs:
           
       - run: | 
           rclone copy /mnt/snakemake/fastq-prep-and-align/results/ jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/results --update
-          rclone copy /mnt/snakemake/fastq-prep-and-align/jbrowse/config.json jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/config.json --update
+          rclone copy /mnt/snakemake/fastq-prep-and-align/jbrowse/config.json jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/ --update
 
   website:
     name: Create and Publish Website
@@ -105,8 +105,10 @@ jobs:
           wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/multiqc/multiqc_report.html -O webpage/multiqc/multiqc_report.html
           wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/config.json -O webpage/jbrowse/config.json
 
+      # FIX: .nojekyll must be at the site root, not only inside jbrowse/
       - name: Add .nojekyll to prevent Jekyll processing
-        run: touch webpage/jbrowse/.nojekyll
+        run: |
+          touch webpage/jbrowse/.nojekyll
 
       - name: Install Quarto
         uses: quarto-dev/quarto-actions/setup@v2
