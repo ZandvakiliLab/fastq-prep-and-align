@@ -1,0 +1,28 @@
+{
+  "assemblies": [
+    {
+      "name": "genome",
+      "sequence": {
+        "type": "ReferenceSequenceTrack",
+        "trackId": "genome-ReferenceSequenceTrack",
+        "adapter": {
+          "type": "TwoBitAdapter",
+          "twoBitLocation": {
+            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/genome/genome.2bit",
+            "locationType": "UriLocation"
+          }
+        }
+      },
+      "aliases": [
+        "tb40"
+      ],
+      "displayName": "CMV TB40"
+    }
+  ],
+  "configuration": {},
+  "connections": [],
+  "defaultSession": {
+    "name": "New Session"
+  },
+  "tracks": []
+}
