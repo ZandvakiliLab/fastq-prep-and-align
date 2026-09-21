@@ -90,8 +90,8 @@ jobs:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
       - run: | 
-          rclone copy jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/results/multiqc/multiqc_report.html quarto/multiqc.html
-          rclone copy jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/ quarto/jbrowse/
+          rclone copy jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/results/multiqc/multiqc_report.html webpage/multiqc.html
+          rclone copy jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/ webpage/jbrowse/
 
       - name: Install Quarto
         uses: quarto-dev/quarto-actions/setup@v2
