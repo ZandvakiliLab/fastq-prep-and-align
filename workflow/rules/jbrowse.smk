@@ -33,6 +33,7 @@ rule faToTwoBit_fa:
 
 rule jbrowse_add_assembly:
     input:
+        fa="results/genome/genome.2bit",
         jbrowse_created="results/jbrowse/create",
     output:
         touch("results/jbrowse/add_assembly"),
@@ -44,8 +45,9 @@ rule jbrowse_add_assembly:
     resources:
         file_lock=1,
     params:
-        s3_url=lambda wc: "{url}/results/genome/genome.2bit".format(
-            url=config["jbrowse"]["s3_url"]
+        s3_url=lambda wc, input: "{url}/{fa}".format(
+            url=config["jbrowse"]["s3_url"], 
+            fa="results/genome/genome.2bit"
         ),
         extra=config["jbrowse"]["add_assembly"]["extra"],
     message:
@@ -96,6 +98,8 @@ rule index_gff:
 
 rule jbrowse_add_anno:
     input:
+        gff="results/genome/genome.sorted.gff.gz",
+        gff_tbi="results/genome/genome.sorted.gff.gz.tbi",
         config=os.path.join(config.get("default-storage-prefix", ""), config["jbrowse"]["dir"], "config.json"),
     output:
         touch("results/jbrowse/add_anno"),
@@ -106,15 +110,16 @@ rule jbrowse_add_anno:
     resources:
         file_lock=1,
     params:
-        s3_url=lambda wc: "{url}/results/genome/genome.sorted.gff.gz".format(
-            url=config["jbrowse"]["s3_url"]
+        s3_url=lambda wc, input: "{url}/{gff}".format(
+            url=config["jbrowse"]["s3_url"], 
+            gff="results/genome/genome.sorted.gff.gz"
         ),
         extra=config["jbrowse"]["add_anno"]["extra"],
     message:
         "add genome annotation to jbrowse"
     shell:
         """
-        jbrowse add-track {params.s3_url} --target {input.config} {params.extra}
+        jbrowse add-track {params.s3_url} --target {input.config} {params.extra} --force
         """
 
 
@@ -158,6 +163,7 @@ rule jbrowse_add_bw:
             jbrowse add-track $i \
                 --target {input.config} \
                 --name "${{i##*/}}" \
+                --force \
                 {params.extra}
         done
 
@@ -165,6 +171,7 @@ rule jbrowse_add_bw:
             jbrowse add-track $i \
                 --target {input.config} \
                 --name "${{i##*/}}" \
+                --force \
                 --config '{{"displays":[{{"type":"LinearWiggleDisplay","displayId":"my_bw-LinearWiggleDisplay","inverted":true}}]}}' \
                 {params.extra}
         done
@@ -206,6 +213,7 @@ rule jbrowse_add_cram:
                 --indexFile $i.crai \
                 --target {input.config} \
                 --name "${{i##*/}}" \
+                --force \
                 --config '{{"displays":[{{"type":"LinearPileupDisplay", "colorBySetting": {{"type": "strand"}}}}]}}' \
                 {params.extra}
         done
