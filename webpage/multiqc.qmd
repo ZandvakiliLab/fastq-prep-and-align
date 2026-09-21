@@ -1,0 +1,27 @@
+---
+format: 
+  html:
+    title-block-style: none
+    page-layout: full
+---
+
+::: {.column-screen}
+```{=html}
+
+<iframe
+id="multiqc"
+src="multiqc_report.html" 
+style="position: absolute; top: 0; left: 30; width: 90%; height: 100%;" 
+allowfullscreen>
+</iframe>
+
+<script>
+  const iframe = document.getElementById('multiqc');
+  
+  iframe.addEventListener('load', function() {
+    // Set the iframe height to match the internal page's scroll height
+    iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+  });
+</script>
+```
+:::
