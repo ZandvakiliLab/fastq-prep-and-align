@@ -73,10 +73,15 @@ jobs:
         with:
           rclone_config: ${{ secrets.RCLONE_CONFIG }}
           
-      - run: | 
+      - name: Transfer Results to Container 
+        run: | 
           rclone copy /mnt/snakemake/fastq-prep-and-align/results/ jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/results --update
           rclone copy /mnt/snakemake/fastq-prep-and-align/jbrowse/config.json jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/ --update
-
+      
+      - name: Clean up Jbrowse Artifacts
+        run: |
+          rm -rf /mnt/snakemake/fastq-prep-and-align/results/jbrowse/
+        
   website:
     name: Create and Publish Website
     runs-on: ubuntu-latest
