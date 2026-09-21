@@ -8,6 +8,5 @@ logs/**
 *.RData
 .test/.cache/
 jbrowse/**
-!jbrowse/config.json
 .test/results/**
 .test/.snakemake/
