@@ -8,7 +8,7 @@ rule jbrowse_create:
     message:
         "create jbrowse folder"
     params:
-        output_dir=config["jbrowse"]["dir"],
+        output_dir="jbrowse",
     shell:
         """
         jbrowse create {params.output_dir} --force
@@ -36,8 +36,7 @@ rule jbrowse_add_assembly:
         fa="results/genome/genome.2bit",
         jbrowse_created="results/jbrowse/create",
     output:
-        touch("results/jbrowse/add_assembly"),
-        config=os.path.join(config.get("default-storage-prefix", ""), config["jbrowse"]["dir"], "config.json"),
+        config=temp("jbrowse/config_assembly.json"),
     conda:
         "../envs/jbrowse.yml"
     log:
@@ -100,9 +99,9 @@ rule jbrowse_add_anno:
     input:
         gff="results/genome/genome.sorted.gff.gz",
         gff_tbi="results/genome/genome.sorted.gff.gz.tbi",
-        config=os.path.join(config.get("default-storage-prefix", ""), config["jbrowse"]["dir"], "config.json"),
+        config="jbrowse/config_assembly.json",
     output:
-        touch("results/jbrowse/add_anno"),
+        config=temp("jbrowse/config_anno.json"),
     conda:
         "../envs/jbrowse.yml"
     log:
@@ -119,7 +118,8 @@ rule jbrowse_add_anno:
         "add genome annotation to jbrowse"
     shell:
         """
-        jbrowse add-track {params.s3_url} --target {input.config} {params.extra} --force
+        cp {input.config} {output.config}
+        jbrowse add-track {params.s3_url} --target {output.config} {params.extra} --force
         """
 
 
@@ -130,15 +130,9 @@ rule jbrowse_add_anno:
 
 rule jbrowse_add_bw:
     input:
-        config=os.path.join(config.get("default-storage-prefix", ""), config["jbrowse"]["dir"], "config.json"),
+        config="jbrowse/config_anno.json",
     output:
-        touch(
-            expand(
-                "results/jbrowse/{sample}_{strand}_bw",
-                sample=samples.index,
-                strand=["plus", "minus"]
-            )
-        ),
+        config=temp("jbrowse/config_bw.json"),
     conda:
         "../envs/jbrowse.yml"
     log:
@@ -159,9 +153,10 @@ rule jbrowse_add_bw:
         "add plus bw tracks to jbrowse"
     shell:
         """
+        cp {input.config} {output.config}
         for i in {params.s3_url_plus}; do
             jbrowse add-track $i \
-                --target {input.config} \
+                --target {output.config} \
                 --name "${{i##*/}}" \
                 --force \
                 {params.extra}
@@ -169,7 +164,7 @@ rule jbrowse_add_bw:
 
         for i in {params.s3_url_minus}; do
             jbrowse add-track $i \
-                --target {input.config} \
+                --target {output.config} \
                 --name "${{i##*/}}" \
                 --force \
                 --config '{{"displays":[{{"type":"LinearWiggleDisplay","displayId":"my_bw-LinearWiggleDisplay","inverted":true}}]}}' \
@@ -184,14 +179,9 @@ rule jbrowse_add_bw:
 
 rule jbrowse_add_cram:
     input:
-        config=os.path.join(config.get("default-storage-prefix", ""), config["jbrowse"]["dir"], "config.json"),
+        config="jbrowse/config_bw.json",
     output:
-        touch(
-            expand(
-                "results/jbrowse/{sample}_cram",
-                sample=samples.index,
-            )
-        ),
+        config="jbrowse/config.json",
     conda:
         "../envs/jbrowse.yml"
     log:
@@ -208,10 +198,11 @@ rule jbrowse_add_cram:
         "add plus cram tracks to jbrowse"
     shell:
         """
+        cp {input.config} {output.config}
         for i in {params.s3_url}; do
             jbrowse add-track $i \
                 --indexFile $i.crai \
-                --target {input.config} \
+                --target {output.config} \
                 --name "${{i##*/}}" \
                 --force \
                 --config '{{"displays":[{{"type":"LinearPileupDisplay", "colorBySetting": {{"type": "strand"}}}}]}}' \

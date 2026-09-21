@@ -78,14 +78,4 @@ rule all:
         expand(
             "results/processed_alignment/cram/{sample}.cram.crai", sample=samples.index
         ),
-        expand(
-            "results/jbrowse/{sample}_{strand}_bw",
-            sample=samples.index,
-            strand=["plus", "minus"],
-        ),
-        expand(
-            "results/jbrowse/{sample}_cram",
-            sample=samples.index
-        ),
-        "results/jbrowse/add_anno",
-        "results/jbrowse/add_assembly",
+        "jbrowse/config.json"
