@@ -8,7 +8,7 @@
         "adapter": {
           "type": "TwoBitAdapter",
           "twoBitLocation": {
-            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align//home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/genome/genome.2bit",
+            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/genome/genome.2bit",
             "locationType": "UriLocation"
           }
         }
