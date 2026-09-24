@@ -74,6 +74,8 @@ mapping_postprocessing:
       extra: "-c -r --no-PG"
     picard:
       extra: ""
+  filter:
+    cmv: "-e 'rname == \"KF297339.1\"'"
 
 # Configs for mapping statistics
 mapping_stats:
@@ -84,7 +86,8 @@ mapping_stats:
   rseqc_bam_stat:
     extra: ""
   deeptools_coverage:
-    genome_size: 2913260081
+    genome_size: 
+      cmv: 236000
     extra: "--binSize 1 --normalizeUsing BPM"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -93,7 +96,7 @@ mapping_stats:
 
 qc:
   multiqc:
-    extra: "--verbose --dirs"
+    extra: "--verbose"
   fastqc:
     extra: "--quiet"
 
@@ -102,16 +105,12 @@ qc:
 # ─────────────────────────────────────────────────────────────────────────────
 
 jbrowse:
-  s3_url: "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align" #No trailing slash
+  path_prefix: "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align" #No trailing slash
   add_assembly:
-    name: 
-    extra: "--alias 'tb40' --displayName 'CMV TB40'"
+    cmv: "--alias 'cmv_tb40' --displayName 'CMV_TB40' --force"
   add_anno:
-    name: 
-    extra: "--name 'annotation'"
+    cmv: "--name CMV_TB40_Annotation --force"
   add_bw:
-    name: 
-    extra: ""
+    extra: "--force"
   add_cram:
-    name: 
-    extra: ""
+    extra: "--force"
