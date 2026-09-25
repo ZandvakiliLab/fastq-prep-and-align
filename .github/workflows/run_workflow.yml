@@ -54,7 +54,7 @@ jobs:
             --set-resources star_align:mem_mb=38000
             --set-resources star_align:threads=4 
             --default-storage-provider fs
-            --default-storage-prefix /mnt/snakemake/fastq-prep-and-align
+            --default-storage-prefix /mnt/snakemake/${{ github.event.repository.name }}
             --shared-fs-usage software-deployment persistence sources source-cache
             --local-storage-prefix /home/runner/snakemake-scratch
             --rerun-incomplete
@@ -74,12 +74,12 @@ jobs:
           
       - name: Transfer Results to Container 
         run: | 
-          rclone copy /mnt/snakemake/fastq-prep-and-align/results/ jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/results --update
-          rclone copy /mnt/snakemake/fastq-prep-and-align/jbrowse/config.json jetstream2://zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/ --update
+          rclone copy /mnt/snakemake/${{ github.event.repository.name }}/results/ jetstream2://zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/results --update
+          rclone copy /mnt/snakemake/${{ github.event.repository.name }}/jbrowse/config.json jetstream2://zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/jbrowse/ --update
       
       - name: Clean up Jbrowse Artifacts
         run: |
-          rm -rf /mnt/snakemake/fastq-prep-and-align/results/jbrowse/
+          rm -rf /mnt/snakemake/${{ github.event.repository.name }}/results/jbrowse/
         
   website:
     name: Create and Publish Website
@@ -106,8 +106,8 @@ jobs:
       - name: Download JBrowse2 config
         run: | 
           mkdir webpage/multiqc
-          wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/multiqc/multiqc_report.html -O webpage/multiqc/multiqc_report.html
-          wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/jbrowse/config.json -O webpage/jbrowse/config.json
+          wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/results/multiqc/multiqc_report.html -O webpage/multiqc/multiqc_report.html
+          wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/jbrowse/config.json -O webpage/jbrowse/config.json
 
       # FIX: .nojekyll must be at the site root, not only inside jbrowse/
       - name: Add .nojekyll to prevent Jekyll processing
