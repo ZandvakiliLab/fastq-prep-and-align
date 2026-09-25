@@ -1,16 +1,16 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Test RNA-Seq Website",
-    "section": "",
-    "text": "This is a test RNA-seq website to allow exploration of RNA-seq results."
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
     "section": "",
     "text": "The author of the website is me."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Test RNA-Seq Website",
+    "section": "",
+    "text": "This is a test RNA-seq website to allow exploration of RNA-seq results."
   }
 ]
