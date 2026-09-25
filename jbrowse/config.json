@@ -8,7 +8,7 @@
         "adapter": {
           "type": "TwoBitAdapter",
           "twoBitLocation": {
-            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/genome/cmv.2bit",
+            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-alignresults/genome/cmv.2bit",
             "locationType": "UriLocation"
           }
         }
@@ -24,12 +24,12 @@
       "adapter": {
         "type": "Gff3TabixAdapter",
         "gffGzLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/genome/cmv.sorted.gff.gz",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-alignresults/genome/cmv.sorted.gff.gz",
           "locationType": "UriLocation"
         },
         "index": {
           "location": {
-            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/genome/cmv.sorted.gff.gz.tbi",
+            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-alignresults/genome/cmv.sorted.gff.gz.tbi",
             "locationType": "UriLocation"
           },
           "indexType": "TBI"
@@ -46,7 +46,7 @@
       "adapter": {
         "type": "BigWigAdapter",
         "bigWigLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.cmv.plus.bw",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-alignresults/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.cmv.plus.bw",
           "locationType": "UriLocation"
         }
       },
@@ -61,7 +61,7 @@
       "adapter": {
         "type": "BigWigAdapter",
         "bigWigLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.cmv.minus.bw",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-alignresults/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.cmv.minus.bw",
           "locationType": "UriLocation"
         }
       },
