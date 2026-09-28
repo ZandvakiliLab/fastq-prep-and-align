@@ -75,7 +75,7 @@ mapping_postprocessing:
     picard:
       extra: ""
   filter:
-    cmv: "-e 'rname == \"KF297339.1\"'"
+    cmv: ""
 
 # Configs for mapping statistics
 mapping_stats:
