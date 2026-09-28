@@ -4,16 +4,32 @@ name: RNA-seq Pipeline
 on:
   push:
     branches: [main]
-    paths:
-      - 'workflow/**'
-      - 'config/**'
-      - 'profiles/**'
-      - '.github/workflows/run_workflow.yml'
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      quarto: ${{ steps.filter.outputs.quarto }}
+      workflow: ${{ steps.filter.outputs.workflow }}
+      snakemake: ${{ steps.filter.outputs.snakemake }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            quarto:
+              - 'webpage/**'
+            workflow:
+              - '.github/workflows/run_workflow.yml'
+            snakemake:
+              - 'workflow/**'
+              - 'config/**'
+              - 'data/**'
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    if: needs.changes.outputs.snakemake == 'true'
     steps:
       - uses: actions/checkout@v4
 
@@ -33,7 +49,12 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
     
-    needs: lint
+    needs: [changes, lint]
+    if: |
+      always() &&
+      !failure() &&
+      !cancelled() &&
+      (needs.changes.outputs.snakemake == 'true' || needs.changes.outputs.workflow == 'true')
 
     steps:
       - name: Checkout repository
@@ -84,7 +105,12 @@ jobs:
   website:
     name: Create and Publish Website
     runs-on: ubuntu-latest
-    needs: snakemake
+    needs: [changes, snakemake]
+    if: |
+      always() &&
+      !failure() &&
+      !cancelled() &&
+      (needs.changes.outputs.snakemake == 'true' || needs.changes.outputs.workflow == 'true' || needs.changes.outputs.quarto == 'true')
     permissions:
       contents: write
     steps:
