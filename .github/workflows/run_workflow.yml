@@ -81,6 +81,7 @@ jobs:
             --local-storage-prefix /home/runner/snakemake-scratch
             --rerun-incomplete
             --show-failed-logs
+            --keep-going
           stagein: "mamba install -n snakemake bioconda::snakemake-storage-plugin-fs"
           show-disk-usage-on-error: true
 
