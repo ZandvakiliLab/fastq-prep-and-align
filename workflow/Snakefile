@@ -67,7 +67,12 @@ use rule multiqc from snakemake_prep_reads as snakemake_prep_reads_multiqc with:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 4. Default Target
+# container definition (optional)
+# ─────────────────────────────────────────────────────────────────────────────
+containerized: "oras://ghcr.io/ZandvakiliLab/fastq-prep-and-align:latest"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 5. Default Target
 # ─────────────────────────────────────────────────────────────────────────────
 
 

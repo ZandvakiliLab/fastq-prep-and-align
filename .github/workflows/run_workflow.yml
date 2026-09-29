@@ -70,7 +70,7 @@ jobs:
           args: >-
             --cores all
             --printshellcmds
-            --software-deployment-method apptainer
+            --software-deployment-method conda
             --resources disk_mb=270000 mem_mb=55000 file_lock=1
             --default-resources disk_mb=75000 mem_mb=38000
             --set-resources star_align:mem_mb=38000

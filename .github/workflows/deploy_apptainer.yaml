@@ -1,0 +1,52 @@
+name: Deploy Apptainer
+
+on:
+  workflow_run:
+    workflows: ["Linting and Testing"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    # Only run if the triggering workflow succeeded (ignored on manual dispatch)
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+
+    permissions:
+      contents: read
+      packages: write  # Required to push to GHCR
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create container file
+        uses: snakemake/snakemake-github-action@v2
+        with:
+          directory: ".test"
+          snakefile: "workflow/Snakefile"
+          install-apptainer: true
+          task: "containerize"
+          containerize-args: "apptainer"
+
+      # The containerize task produces a Singularity file — build it into a .sif
+      - name: Build Apptainer image
+        shell: bash
+        working-directory: .test
+        run: |
+          sudo apptainer build ../apptainer.sif ../apptainer.def
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Apptainer image to GHCR
+        run: |
+          IMAGE_TAG="ghcr.io/${{ github.repository_owner }}/$(basename ${{ github.repository }}):latest"
+          IMAGE_TAG="${IMAGE_TAG,,}"  # GHCR requires lowercase
+          apptainer push apptainer.sif "oras://${IMAGE_TAG}"
