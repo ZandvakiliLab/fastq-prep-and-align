@@ -8,12 +8,27 @@
         "adapter": {
           "type": "TwoBitAdapter",
           "twoBitLocation": {
-            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/genome/cmv.2bit",
+            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/genome/cmv.2bit",
             "locationType": "UriLocation"
           }
         }
       },
       "displayName": "CMV_TB40"
+    },
+    {
+      "name": "human",
+      "sequence": {
+        "type": "ReferenceSequenceTrack",
+        "trackId": "human-ReferenceSequenceTrack",
+        "adapter": {
+          "type": "TwoBitAdapter",
+          "twoBitLocation": {
+            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/genome/human.2bit",
+            "locationType": "UriLocation"
+          }
+        }
+      },
+      "displayName": "Human"
     }
   ],
   "tracks": [
@@ -24,12 +39,12 @@
       "adapter": {
         "type": "Gff3TabixAdapter",
         "gffGzLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/genome/cmv.sorted.gff.gz",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/genome/cmv.sorted.gff.gz",
           "locationType": "UriLocation"
         },
         "index": {
           "location": {
-            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/genome/cmv.sorted.gff.gz.tbi",
+            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/genome/cmv.sorted.gff.gz.tbi",
             "locationType": "UriLocation"
           },
           "indexType": "TBI"
@@ -46,7 +61,7 @@
       "adapter": {
         "type": "BigWigAdapter",
         "bigWigLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.cmv.plus.bw",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.cmv.plus.bw",
           "locationType": "UriLocation"
         }
       },
@@ -61,7 +76,7 @@
       "adapter": {
         "type": "BigWigAdapter",
         "bigWigLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/results/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.cmv.minus.bw",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.cmv.minus.bw",
           "locationType": "UriLocation"
         }
       },
@@ -83,16 +98,102 @@
       "adapter": {
         "type": "CramAdapter",
         "cramLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_cmv.cram",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_cmv.cram",
           "locationType": "UriLocation"
         },
         "craiLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_cmv.cram.crai",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_cmv.cram.crai",
           "locationType": "UriLocation"
         }
       },
       "assemblyNames": [
         "cmv"
+      ],
+      "displays": [
+        {
+          "type": "LinearPileupDisplay",
+          "colorBySetting": {
+            "type": "strand"
+          }
+        }
+      ]
+    },
+    {
+      "type": "FeatureTrack",
+      "trackId": "human.sorted.gff",
+      "name": "Human_Annotation",
+      "adapter": {
+        "type": "Gff3TabixAdapter",
+        "gffGzLocation": {
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/genome/human.sorted.gff.gz",
+          "locationType": "UriLocation"
+        },
+        "index": {
+          "location": {
+            "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/genome/human.sorted.gff.gz.tbi",
+            "locationType": "UriLocation"
+          },
+          "indexType": "TBI"
+        }
+      },
+      "assemblyNames": [
+        "human"
+      ]
+    },
+    {
+      "type": "QuantitativeTrack",
+      "trackId": "12hpi_4sU_IAA_XRN1_rep1.human.plus",
+      "name": "12hpi_4sU_IAA_XRN1_rep1.human.plus.bw",
+      "adapter": {
+        "type": "BigWigAdapter",
+        "bigWigLocation": {
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.human.plus.bw",
+          "locationType": "UriLocation"
+        }
+      },
+      "assemblyNames": [
+        "human"
+      ]
+    },
+    {
+      "type": "QuantitativeTrack",
+      "trackId": "12hpi_4sU_IAA_XRN1_rep1.human.minus",
+      "name": "12hpi_4sU_IAA_XRN1_rep1.human.minus.bw",
+      "adapter": {
+        "type": "BigWigAdapter",
+        "bigWigLocation": {
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/deeptools/coverage/12hpi_4sU_IAA_XRN1_rep1.human.minus.bw",
+          "locationType": "UriLocation"
+        }
+      },
+      "assemblyNames": [
+        "human"
+      ],
+      "displays": [
+        {
+          "type": "LinearWiggleDisplay",
+          "displayId": "my_bw-LinearWiggleDisplay",
+          "inverted": true
+        }
+      ]
+    },
+    {
+      "type": "AlignmentsTrack",
+      "trackId": "12hpi_4sU_IAA_XRN1_rep1_human",
+      "name": "12hpi_4sU_IAA_XRN1_rep1_human.cram",
+      "adapter": {
+        "type": "CramAdapter",
+        "cramLocation": {
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_human.cram",
+          "locationType": "UriLocation"
+        },
+        "craiLocation": {
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_human.cram.crai",
+          "locationType": "UriLocation"
+        }
+      },
+      "assemblyNames": [
+        "human"
       ],
       "displays": [
         {
