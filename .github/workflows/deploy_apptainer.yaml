@@ -2,7 +2,7 @@ name: Deploy Apptainer
 
 on:
   workflow_run:
-    workflows: ["Linting and Testing"]
+    workflows: ["RNA-seq Pipeline"]
     types:
       - completed
   workflow_dispatch:
