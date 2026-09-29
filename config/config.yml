@@ -26,7 +26,6 @@ umi_extraction:
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. Alignment Module Configs
 # ─────────────────────────────────────────────────────────────────────────────
-# Configs for obtaining genome sequence and annotation
 genome:
   cmv:
     source: "ncbi" # local vs ncbi database
@@ -36,6 +35,16 @@ genome:
       gff:
     datasets:
       genbank: "KF297339.1"
+      assembly: ""
+      extra: ""
+  human:
+    source: "local" # local vs ncbi database
+    prefix:
+    local:
+      fasta: "data/chrMT.fna"
+      gff: "data/chrMT.gff"
+    datasets:
+      genbank:
       assembly: ""
       extra: ""
 
@@ -76,6 +85,7 @@ mapping_postprocessing:
       extra: ""
   filter:
     cmv: ""
+    human: ""
 
 # Configs for mapping statistics
 mapping_stats:
@@ -86,9 +96,10 @@ mapping_stats:
   rseqc_bam_stat:
     extra: ""
   deeptools_coverage:
-    genome_size: 
+    genome_size:
       cmv: 236000
-    extra: "--binSize 1 --normalizeUsing BPM"
+      human: 16560
+    extra: "--binSize 1 --normalizeUsing CPM --verbose"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. Common Configs
@@ -105,11 +116,13 @@ qc:
 # ─────────────────────────────────────────────────────────────────────────────
 
 jbrowse:
-  path_prefix: "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/fastq-prep-and-align" #No trailing slash
+  path_prefix: "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq" #No trailing slash
   add_assembly:
     cmv: "--alias 'cmv_tb40' --displayName 'CMV_TB40' --force"
+    human: "--alias 'human' --displayName 'Human' --force"
   add_anno:
     cmv: "--name CMV_TB40_Annotation --force"
+    human: "--name Human_Annotation --force"
   add_bw:
     extra: "--force"
   add_cram:
