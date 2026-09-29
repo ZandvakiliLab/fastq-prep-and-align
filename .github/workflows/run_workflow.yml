@@ -97,7 +97,6 @@ jobs:
       - name: Transfer Results to Container 
         run: | 
           rclone copy /mnt/snakemake/${{ github.event.repository.name }}/results/ jetstream2://zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/results --update
-          rclone copy /mnt/snakemake/${{ github.event.repository.name }}/jbrowse/config.json jetstream2://zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/jbrowse/ --update
       
       - name: Clean up Jbrowse Artifacts
         run: |
@@ -134,7 +133,7 @@ jobs:
         run: | 
           mkdir webpage/multiqc
           wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/results/multiqc/multiqc_report.html -O webpage/multiqc/multiqc_report.html
-          wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/jbrowse/config.json -O webpage/jbrowse/config.json
+          wget https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/${{ github.event.repository.name }}/results/jbrowse/config.json -O webpage/jbrowse/config.json
 
       # FIX: .nojekyll must be at the site root, not only inside jbrowse/
       - name: Add .nojekyll to prevent Jekyll processing

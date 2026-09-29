@@ -82,4 +82,4 @@ rule all:
                 config.get("mapping_postprocessing", {}).get("filter", {}).keys()
             ),
         ),
-        "jbrowse/config.json",
+        "results/jbrowse/config.json",
