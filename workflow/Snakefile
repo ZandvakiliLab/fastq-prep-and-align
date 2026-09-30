@@ -21,7 +21,7 @@ samples = (
 
 
 # declare https://github.com/ZandvakiliLab/snakemake-prep-reads as a module
-module snakemake_prep_reads:
+module prepreads:
     snakefile:
         github(
             "ZandvakiliLab/snakemake-prep-reads",
@@ -33,7 +33,7 @@ module snakemake_prep_reads:
 
 
 # use all rules from https://github.com/ZandvakiliLab/snakemake-prep-reads
-use rule * from snakemake_prep_reads as snakemake_prep_reads_*
+use rule * from prepreads as prepreads_*
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -42,7 +42,7 @@ use rule * from snakemake_prep_reads as snakemake_prep_reads_*
 
 
 # declare https://github.com/ZandvakiliLab/snakemake-align as a module
-module snakemake_align:
+module align:
     snakefile:
         github(
             "ZandvakiliLab/snakemake-align", path="workflow/Snakefile", branch="main"
@@ -52,7 +52,7 @@ module snakemake_align:
 
 
 # use all rules from https://github.com/ZandvakiliLab/snakemake-align
-use rule * from snakemake_align exclude multiqc as snakemake_align_*
+use rule * from align exclude multiqc as align_*
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -60,16 +60,16 @@ use rule * from snakemake_align exclude multiqc as snakemake_align_*
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-use rule multiqc from snakemake_prep_reads as snakemake_prep_reads_multiqc with:
+use rule multiqc from prepreads as prepreads_multiqc with:
     input:
-        lambda wc: snakemake_prep_reads.get_multiqc_input(wc)
-        + snakemake_align.get_multiqc_input(wc),
+        lambda wc: prepreads.get_multiqc_input(wc) + align.get_multiqc_input(wc),
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # container definition (optional)
 # ─────────────────────────────────────────────────────────────────────────────
 containerized: "oras://ghcr.io/ZandvakiliLab/fastq-prep-and-align:latest"
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 5. Default Target
