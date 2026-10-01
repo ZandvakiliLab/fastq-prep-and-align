@@ -98,11 +98,11 @@
       "adapter": {
         "type": "CramAdapter",
         "cramLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_cmv.cram",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_cmv.cram",
           "locationType": "UriLocation"
         },
         "craiLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_cmv.cram.crai",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_cmv.cram.crai",
           "locationType": "UriLocation"
         }
       },
@@ -112,8 +112,9 @@
       "displays": [
         {
           "type": "LinearPileupDisplay",
+          "showLegend": true,
           "colorBySetting": {
-            "type": "strand"
+            "type": "stranded"
           }
         }
       ]
@@ -184,11 +185,11 @@
       "adapter": {
         "type": "CramAdapter",
         "cramLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_human.cram",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_human.cram",
           "locationType": "UriLocation"
         },
         "craiLocation": {
-          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/home/runner/snakemake-scratch/fs/mnt/snakemake/fastq-prep-and-align/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_human.cram.crai",
+          "uri": "https://js2.jetstream-cloud.org:8001/swift/v1/zandvakili-cmv-rna-seq/jurges2026-tb40-slamseq/results/processed_alignment/cram/12hpi_4sU_IAA_XRN1_rep1_human.cram.crai",
           "locationType": "UriLocation"
         }
       },
@@ -198,8 +199,9 @@
       "displays": [
         {
           "type": "LinearPileupDisplay",
+          "showLegend": true,
           "colorBySetting": {
-            "type": "strand"
+            "type": "stranded"
           }
         }
       ]
