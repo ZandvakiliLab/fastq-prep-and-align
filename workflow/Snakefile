@@ -68,7 +68,7 @@ use rule multiqc from prepreads as prepreads_multiqc with:
 # ─────────────────────────────────────────────────────────────────────────────
 # container definition (optional)
 # ─────────────────────────────────────────────────────────────────────────────
-containerized: "oras://ghcr.io/ZandvakiliLab/fastq-prep-and-align:latest"
+containerized: "oras://ghcr.io/zandvakililab/fastq-prep-and-align:latest"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
